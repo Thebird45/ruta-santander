@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruta Santander · Turismo de aventura (demo)</title>
+<style>
+  :root{
+    --bg:#0e1714; --bg2:#13211c; --card:#182a24; --ink:#f3f1ea; --muted:#b9c3bd;
+    --acc:#f2a33a; --acc2:#3fbf8f; --line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* nav */
+  header{position:sticky;top:0;z-index:20;background:rgba(14,23,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+  .logo svg{width:30px;height:30px}
+  .links{display:flex;gap:26px;font-size:.95rem;color:var(--muted)}
+  .links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#1b1206;font-weight:700;padding:12px 22px;border-radius:999px;transition:transform .15s,box-shadow .15s;border:0;cursor:pointer;font-size:1rem}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(242,163,58,.25)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.25)}
+  .menu-btn{display:none;background:none;border:0;color:var(--ink);font-size:1.6rem;cursor:pointer}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:110px 0 120px}
+  .hero-bg{position:absolute;inset:0;z-index:-1}
+  .hero h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.05;max-width:760px;font-weight:850;letter-spacing:-1px}
+  .hero h1 span{color:var(--acc)}
+  .hero p{max-width:560px;color:var(--muted);font-size:1.15rem;margin:22px 0 34px}
+  .hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .stats{display:flex;gap:40px;margin-top:56px;flex-wrap:wrap}
+  .stats b{display:block;font-size:1.8rem;color:var(--ink)}
+  .stats small{color:var(--muted)}
+
+  section{padding:90px 0}
+  .kicker{color:var(--acc2);font-weight:700;letter-spacing:2px;font-size:.8rem;text-transform:uppercase}
+  h2{font-size:clamp(1.8rem,4vw,2.6rem);margin:8px 0 14px;letter-spacing:-.5px}
+  .lead{color:var(--muted);max-width:620px}
+
+  /* plans */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin-top:44px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .2s,border-color .2s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(242,163,58,.45)}
+  .card .art{height:170px;position:relative}
+  .card .body{padding:22px}
+  .card h3{font-size:1.25rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .price{font-weight:800;font-size:1.15rem}
+  .price small{font-weight:500;color:var(--muted);font-size:.8rem}
+  .tag{font-size:.75rem;background:rgba(63,191,143,.14);color:var(--acc2);padding:4px 10px;border-radius:999px;font-weight:700}
+  .art-1{background:linear-gradient(160deg,#1d6b8f,#0d3c53 55%,#2f8f6a)}
+  .art-2{background:linear-gradient(180deg,#f2a33a 0%,#e06b3a 45%,#3b2f5c 100%)}
+  .art-3{background:linear-gradient(170deg,#3d6b3a,#1e3a2a 60%,#0f1f18)}
+  .art svg{position:absolute;inset:0;width:100%;height:100%}
+
+  /* why */
+  .why{background:var(--bg2);border-block:1px solid var(--line)}
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;margin-top:40px}
+  .feat .ic{width:48px;height:48px;border-radius:14px;background:rgba(242,163,58,.12);display:grid;place-items:center;margin-bottom:14px;font-size:1.4rem}
+  .feat h4{font-size:1.05rem;margin-bottom:4px}
+  .feat p{color:var(--muted);font-size:.95rem}
+
+  /* testimonials */
+  .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:40px}
+  .quote{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+  .quote p{font-size:1.02rem}
+  .quote footer{margin-top:16px;color:var(--muted);font-size:.9rem}
+  .note{color:var(--muted);font-size:.8rem;margin-top:14px;font-style:italic}
+
+  /* form */
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  form{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;gap:14px}
+  label{font-size:.85rem;color:var(--muted)}
+  input,select,textarea{width:100%;margin-top:6px;background:#0f1d18;border:1px solid rgba(255,255,255,.12);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);border-color:transparent}
+  .ok{display:none;background:rgba(63,191,143,.14);color:var(--acc2);padding:12px 14px;border-radius:12px;font-weight:600}
+  .wa{display:inline-flex;align-items:center;gap:10px;margin-top:22px;background:#25d366;color:#0b2414;font-weight:700;padding:12px 20px;border-radius:999px}
+
+  footer.site{padding:36px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+  footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (max-width:820px){
+    .links{display:none;position:absolute;top:66px;left:0;right:0;background:var(--bg);flex-direction:column;padding:18px 22px;border-bottom:1px solid var(--line)}
+    .links.open{display:flex}
+    .menu-btn{display:block}
+    nav .btn{display:none}
+    .contact{grid-template-columns:1fr}
+    .hero{padding:80px 0 90px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="#" class="logo" aria-label="Inicio">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M2 26 L12 10 L18 19 L22 13 L30 26 Z" fill="#f2a33a"/><circle cx="24" cy="7" r="3" fill="#3fbf8f"/></svg>
+        Ruta Santander
+      </a>
+      <div class="links" id="links">
+        <a href="#planes">Planes</a>
+        <a href="#por-que">Por qué nosotros</a>
+        <a href="#opiniones">Opiniones</a>
+        <a href="#reservar">Reservar</a>
+      </div>
+      <a href="#reservar" class="btn">Reserva tu cupo</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="hero-bg" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1a2f3a"/><stop offset=".55" stop-color="#2a4a3f"/><stop offset="1" stop-color="#0e1714"/>
+      </linearGradient>
+      <radialGradient id="sun" cx=".78" cy=".28" r=".35"><stop offset="0" stop-color="#f2a33a" stop-opacity=".55"/><stop offset="1" stop-color="#f2a33a" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1440" height="700" fill="url(#sky)"/>
+    <rect width="1440" height="700" fill="url(#sun)"/>
+    <path d="M0 470 L180 330 L330 420 L520 250 L700 400 L860 300 L1040 420 L1240 280 L1440 380 L1440 700 L0 700Z" fill="#20372f" opacity=".9"/>
+    <path d="M0 540 L220 430 L420 520 L640 400 L860 520 L1080 430 L1300 520 L1440 470 L1440 700 L0 700Z" fill="#162920"/>
+    <path d="M520 700 C600 610 660 600 720 560 C780 600 840 620 920 700Z" fill="#2c6f8a" opacity=".55"/>
+    <g opacity=".85"><path d="M1060 170 q30 -22 60 0" stroke="#f3f1ea" stroke-width="3" fill="none"/><line x1="1075" y1="172" x2="1088" y2="205" stroke="#f3f1ea" stroke-width="1.5"/><line x1="1105" y1="172" x2="1092" y2="205" stroke="#f3f1ea" stroke-width="1.5"/><circle cx="1090" cy="209" r="4" fill="#f2a33a"/></g>
+  </svg>
+  <div class="wrap">
+    <h1 class="reveal">Vive Santander desde el <span>agua</span>, el <span>aire</span> y la montaña</h1>
+    <p class="reveal">Rafting, parapente y caminatas guiadas con instructores certificados. Tú solo trae ganas, nosotros nos encargamos del resto.</p>
+    <div class="ctas reveal">
+      <a href="#planes" class="btn">Ver planes</a>
+      <a href="#reservar" class="btn ghost">Hablar con un asesor</a>
+    </div>
+    <div class="stats reveal">
+      <div><b>3</b><small>experiencias</small></div>
+      <div><b>100%</b><small>con guía certificado</small></div>
+      <div><b>Todo</b><small>el equipo incluido</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="planes">
+  <div class="wrap">
+    <span class="kicker reveal">Planes</span>
+    <h2 class="reveal">Escoge tu aventura</h2>
+    <p class="lead reveal">Todos los planes incluyen transporte desde el punto de encuentro, equipo de seguridad, seguro y fotos del recorrido.</p>
+    <div class="grid">
+      <article class="card reveal">
+        <div class="art art-1"><svg viewBox="0 0 300 170"><path d="M0 120 C60 100 90 140 150 120 C210 100 240 140 300 120 L300 170 L0 170Z" fill="#7fd0e8" opacity=".5"/><path d="M90 110 h120 l-14 18 h-92z" fill="#f2a33a"/><circle cx="125" cy="100" r="6" fill="#f3f1ea"/><circle cx="150" cy="98" r="6" fill="#f3f1ea"/><circle cx="175" cy="100" r="6" fill="#f3f1ea"/></svg></div>
+        <div class="body">
+          <h3>Rafting en el río</h3>
+          <p>Rápidos nivel III con paradas para nadar. Ideal para grupos de amigos.</p>
+          <div class="meta"><span class="price">$ 80.000 <small>/ persona</small></span><span class="tag">2 horas</span></div>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art art-2"><svg viewBox="0 0 300 170"><path d="M0 140 L80 90 L150 130 L220 80 L300 120 L300 170 L0 170Z" fill="#2a1f3d" opacity=".75"/><path d="M120 45 q30 -25 60 0" stroke="#f3f1ea" stroke-width="5" fill="none"/><line x1="130" y1="47" x2="147" y2="80" stroke="#f3f1ea" stroke-width="2"/><line x1="170" y1="47" x2="153" y2="80" stroke="#f3f1ea" stroke-width="2"/><circle cx="150" cy="84" r="5" fill="#0e1714"/></svg></div>
+        <div class="body">
+          <h3>Parapente biplaza</h3>
+          <p>Vuelo de 15 a 20 minutos sobre el cañón con piloto experto. Video del vuelo incluido.</p>
+          <div class="meta"><span class="price">$ 220.000 <small>/ persona</small></span><span class="tag">Más vendido</span></div>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art art-3"><svg viewBox="0 0 300 170"><path d="M0 150 L70 70 L130 130 L190 55 L300 150 L300 170 L0 170Z" fill="#5c8f4e" opacity=".7"/><path d="M40 160 C90 140 120 150 160 130 C200 112 230 120 270 100" stroke="#f2a33a" stroke-width="3" stroke-dasharray="6 6" fill="none"/></svg></div>
+        <div class="body">
+          <h3>Caminata y cascadas</h3>
+          <p>Sendero ecológico de dificultad media hasta las cascadas, con almuerzo típico.</p>
+          <div class="meta"><span class="price">$ 95.000 <small>/ persona</small></span><span class="tag">Medio día</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="por-que" class="why">
+  <div class="wrap">
+    <span class="kicker reveal">Por qué nosotros</span>
+    <h2 class="reveal">Aventura sin preocupaciones</h2>
+    <div class="features">
+      <div class="feat reveal"><div class="ic">🦺</div><h4>Seguridad primero</h4><p>Equipo revisado antes de cada salida y guías con certificación vigente.</p></div>
+      <div class="feat reveal"><div class="ic">📸</div><h4>Fotos y video</h4><p>Te llevas el recuerdo de tu aventura sin tener que sacar el celular.</p></div>
+      <div class="feat reveal"><div class="ic">🚐</div><h4>Transporte incluido</h4><p>Te recogemos en el punto de encuentro y te devolvemos al final del día.</p></div>
+      <div class="feat reveal"><div class="ic">💬</div><h4>Atención por WhatsApp</h4><p>Resolvemos tus dudas y confirmamos tu reserva en minutos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="opiniones">
+  <div class="wrap">
+    <span class="kicker reveal">Opiniones</span>
+    <h2 class="reveal">Lo que dicen los viajeros</h2>
+    <div class="quotes">
+      <figure class="quote reveal"><p>“Texto de ejemplo: aquí va la opinión de un cliente real sobre el plan de rafting.”</p><footer>— Nombre del cliente · Ciudad</footer></figure>
+      <figure class="quote reveal"><p>“Texto de ejemplo: aquí va la opinión de un cliente real sobre el vuelo en parapente.”</p><footer>— Nombre del cliente · Ciudad</footer></figure>
+      <figure class="quote reveal"><p>“Texto de ejemplo: aquí va la opinión de un cliente real sobre la caminata.”</p><footer>— Nombre del cliente · Ciudad</footer></figure>
+    </div>
+    <p class="note">Sitio de demostración: los textos de esta sección son ejemplos para reemplazar por opiniones reales del negocio.</p>
+  </div>
+</section>
+
+<section id="reservar" class="why">
+  <div class="wrap contact">
+    <div>
+      <span class="kicker reveal">Reservar</span>
+      <h2 class="reveal">Aparta tu cupo</h2>
+      <p class="lead reveal">Déjanos tus datos y te escribimos para confirmar fecha, hora y punto de encuentro. Sin pagos por adelantado en este formulario.</p>
+      <a class="wa reveal" href="#reservar" onclick="return false;">💬 Escríbenos por WhatsApp</a>
+    </div>
+    <form id="form" class="reveal" novalidate>
+      <label>Nombre<input name="nombre" required placeholder="Tu nombre"></label>
+      <label>Plan<select name="plan"><option>Rafting en el río</option><option>Parapente biplaza</option><option>Caminata y cascadas</option></select></label>
+      <label>Fecha<input type="date" name="fecha" required></label>
+      <label>Personas<input type="number" name="personas" min="1" max="20" value="2"></label>
+      <label>Comentarios<textarea name="msg" rows="3" placeholder="¿Algo que debamos saber?"></textarea></label>
+      <button class="btn" type="submit">Enviar solicitud</button>
+      <div class="ok" id="ok">¡Listo! Te contactaremos pronto para confirmar tu reserva.</div>
+    </form>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© Ruta Santander · Sitio de demostración</span>
+    <span>Diseño y desarrollo: Juan B.</span>
+  </div>
+</footer>
+
+<script>
+  // menú móvil
+  const menuBtn=document.getElementById('menuBtn'), links=document.getElementById('links');
+  menuBtn.addEventListener('click',()=>links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  // animación al hacer scroll
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // formulario de demostración (no envía datos a ningún lado)
+  document.getElementById('form').addEventListener('submit',e=>{
+    e.preventDefault();
+    const f=e.target;
+    if(!f.nombre.value.trim()||!f.fecha.value){ (f.nombre.value.trim()?f.fecha:f.nombre).focus(); return; }
+    document.getElementById('ok').style.display='block';
+    f.querySelector('button').disabled=true;
+  });
+</script>
+</body>
+</html>
